@@ -8,12 +8,12 @@ const LessonPage = () => {
   const { id } = useParams();
   const lessonId = parseInt(id, 10);
 
-  // State for code editor only used in lesson 1
+  // State for the code editor (used in lesson 1)
   const [code, setCode] = useState('');
   const [result, setResult] = useState('');
   const [loading, setLoading] = useState(false);
 
-  // Predefined expected HTML answer for "Hello World" lesson
+  // Expected HTML code for the "Hello World" lesson (lesson 1)
   const expectedCode = `<!DOCTYPE html>
 <html>
   <head>
@@ -28,33 +28,57 @@ const LessonPage = () => {
   const handleRun = async () => {
     setLoading(true);
     const userCode = code.trim();
-    let isCorrect = false;
 
-    // Compare the submitted code with the expected answer
-    if (userCode === expectedCode) {
-      setResult('Correct! Your code matches the expected output.');
-      isCorrect = true;
-    } else {
-      setResult('Incorrect. Please try again.');
-    }
-
-    // Save the submission to Firestore
+    // Replace the basic comparison with a call to the Firebase Function
     try {
+      // Replace <YOUR_REGION> and <YOUR_PROJECT_ID> with your Firebase project details.
+      // For example: https://us-central1-your-project-id.cloudfunctions.net/compareCode
+      const functionUrl = "https://us-central1-beginnerbyte.cloudfunctions.net/compareCode";
+      
+      const response = await fetch(functionUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          user_code: userCode,
+          original_code: expectedCode
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error("Error in code comparison");
+      }
+
+      const data = await response.json();
+
+      let displayResult = "";
+      if (data.score === 3) {
+        displayResult = "Correct! Congratulations! Your code matches the expected output.";
+      } else {
+        displayResult = `Score: ${data.score}. Suggestions: ${data.suggestions.join(" ")}`;
+      }
+
+      setResult(displayResult);
+
+      // Save the submission to Firestore including the evaluation details
       const currentUser = auth.currentUser;
       await addDoc(collection(firestore, 'submissions'), {
         userEmail: currentUser ? currentUser.email : 'anonymous',
         lessonId: id,
         code: userCode,
-        isCorrect,
+        score: data.score,
+        suggestions: data.suggestions,
         timestamp: serverTimestamp(),
       });
     } catch (error) {
-      console.error("Error saving submission: ", error);
+      console.error("Error:", error);
+      setResult("Error comparing code. Please try again later.");
     }
     setLoading(false);
   };
 
-  // For lesson 1, display the code editor and run button
+  // For lesson 1, display the code editor and run button with the new functionality
   if (lessonId === 1) {
     return (
       <div className="container mt-4">
