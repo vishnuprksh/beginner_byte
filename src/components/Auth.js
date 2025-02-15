@@ -1,8 +1,8 @@
 // src/components/Auth.js
 import React, { useState } from 'react';
-import { 
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword 
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword
 } from 'firebase/auth';
 import { auth } from '../firebase';
 
