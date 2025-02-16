@@ -14,16 +14,8 @@ const LessonPage = () => {
     const [loading, setLoading] = useState(false);
     const [suggestions, setSuggestions] = useState([]);
 
-    // Predefined expected HTML answer for "Hello World" lesson
-    const expectedCode = `<!DOCTYPE html>
-<html>
-  <head>
-    <title>Hello World</title>
-  </head>
-  <body>
-    Hello World
-  </body>
-</html>`.trim();
+    // Predefined expected HTML answer for "Hello World" lesson  // MODIFIED: Comment updated
+    const expectedCode = `print("Hello, World!")`.trim(); // MODIFIED: Expected Python code
 
     const handleRun = async () => {
         setLoading(true);
@@ -86,16 +78,16 @@ const LessonPage = () => {
     if (lessonId === 1) {
         return (
             <div className="container mt-4">
-                <h1>Lesson {id}: HTML Hello World</h1>
+                <h1>Lesson {id}: Python Hello World</h1> {/* MODIFIED: Lesson title */}
                 <p>
-                    Write HTML code to display "Hello World" and press the run button below.
+                    Write Python code to display "Hello, World!" and press the run button below. {/* MODIFIED: Instructions to Python */}
                 </p>
                 <textarea
                     className="form-control mb-3"
                     rows="10"
                     value={code}
                     onChange={(e) => setCode(e.target.value)}
-                    placeholder="Type your HTML code here..."
+                    placeholder="Type your Python code here..." // MODIFIED: Placeholder text
                 ></textarea>
                 <button
                     className="btn btn-primary"

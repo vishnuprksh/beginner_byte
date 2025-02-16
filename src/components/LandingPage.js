@@ -3,15 +3,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const lessons = [
-  { id: 1, title: "Introduction to Coding", videoUrl: "https://via.placeholder.com/150", description: "Learn the basics of coding." },
-  { id: 2, title: "Building Your First Website", videoUrl: "https://via.placeholder.com/150", description: "Get started with HTML and CSS." },
-  // Add more lessons as needed
+  { id: 1, title: "Python Basics: Hello World", videoUrl: "https://via.placeholder.com/150", description: "Start your Python journey with the classic 'Hello, World!' program." },
+  { id: 2, title: "Variables and Data Types in Python", videoUrl: "https://via.placeholder.com/150", description: "Learn about variables and basic data types in Python." },
+  // Add more Python lessons as needed
 ];
 
 const LandingPage = () => {
   return (
     <div className="container mt-4">
-      <h1>BeginnerByte Lessons</h1>
+      <h1>BeginnerByte Python Lessons</h1> {/* MODIFIED: Changed heading */}
       <div className="row">
         {lessons.map((lesson) => (
           <div className="col-md-4" key={lesson.id}>
